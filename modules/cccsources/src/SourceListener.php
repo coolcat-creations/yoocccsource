@@ -9,7 +9,7 @@ class SourceListener
 	 */
 	public static function initSource($source)
 	{
-		$source->objectType('Article', JoomlaReferencesType::config());
+		$source->objectType('JoomlaReferenzesType', JoomlaReferencesType::config());
 		$source->queryType(JoomlaReferencesQueryType::config());
 	}
 }
