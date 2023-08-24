@@ -20,13 +20,18 @@ class JoomlaReferencesProvider
 			$query->where($db->quoteName('field_id') . ' = 126');
 			$db->setQuery($query);
 			try {
-				$id = $db->loadObjectList();
+				$references = $db->loadObjectList();
 			} catch (\RuntimeException $e) {
 				error_log($e->getMessage());
 			}
 		}
 
-		return (object) ['id' => $id];
+ 		// return $references as an array of article ids
+
+		return array_map(function ($reference) {
+			return $reference->value;
+		}, $references);
+
 
 	}
 }
