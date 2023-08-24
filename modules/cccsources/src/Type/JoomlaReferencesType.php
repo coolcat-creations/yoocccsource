@@ -9,7 +9,7 @@ class JoomlaReferencesType
 	{
 		return [
 			'fields' => [
-					'id' => [
+				'id' => [
 					'type' => 'String',
 					'metadata' => [
 						'label' => trans('ID'),
@@ -28,7 +28,17 @@ class JoomlaReferencesType
 
 	public static function resolve($obj, $args, $context, $info)
 	{
-		return (isset($obj->id) && is_array($obj->id) && isset($obj->id[0]->value)) ? $obj->id[0]->value : null;
+		$references = JoomlaReferencesProvider::getCurrentReferences();
+print_r($references);
+die();
+
+		$mvc = Factory::getApplication()->bootComponent('com_content')->getMVCFactory();
+
+		$model = $mvc->createModel('Article', 'Site', ['ignore_request' => true]);
+
+		return array_map(function ($id) use ($model) {
+			return $model->getItem($id);
+		}, $references);
 	}
 
 }
