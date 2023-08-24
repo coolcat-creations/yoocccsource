@@ -3,6 +3,7 @@
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
 use Joomla\CMS\Helper\ComponentHelper;
+use YOOtheme\Builder\Joomla\Source\ArticleHelper;
 
 
 class JoomlaReferencesQueryType
@@ -12,7 +13,9 @@ class JoomlaReferencesQueryType
 		return [
 			'fields' => [
 				'current_custom_reference' => [
-					'type' => 'Article',
+					'type' => [
+						'listOf' => 'Article'
+					],
 					'metadata' => [
 						'label' => 'Custom Related References',
 						'group' => 'COOLCAT creations',
@@ -30,14 +33,16 @@ class JoomlaReferencesQueryType
 
 		$references = JoomlaReferencesProvider::getCurrentReferences();
 
-
 		$mvc = Factory::getApplication()->bootComponent('com_content')->getMVCFactory();
 		$model = $mvc->createModel('Article', 'Site', ['ignore_request' => true]);
 
-		return array_map(function ($id) use ($model) {
+	/*	return array_map(function ($id) use ($model) {
 			$article = $model->getItem($id);
 			return $article;
-		}, $references);
+		}, $references);*/
+
+		return ArticleHelper::query($references);
+
 
 	}
 }
